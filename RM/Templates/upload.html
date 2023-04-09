@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    {% comment %} {% load static %} {% endcomment %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycle Mate</title>
+    {% comment %} {% load static %} {% endcomment %}
+    <link rel = "icon" type="image" href="{%static "Images/favicon.ico" %}"> 
+    {% comment %} {% load static %} {% endcomment %}
+    <link rel="stylesheet" href = "{% static 'css/index.css' %}">
+    <link rel="stylesheet" href = "{% static 'css/Lower.css' %}">
+    <!-- <link rel="stylesheet" href = "{{STATIC_URL}} css/index.css"> -->
+</head>
+<body>
+    <header>
+        <nav id = "navbar">
+            <div class = "logo"><a href = "/">Recycle  Mate</a></div>
+            <div id ="Main-list">
+                <ul>
+                    <li><a class = "nav_link" href = "/">Home</a></li>
+                    <li><a class = "nav_link" href = "/">About Us</a></li>
+                    <li><a class = "nav_link" href = "/predict">Scan</a></li>
+                    <li>
+                    <div class = "dropdown">
+                        <a href = "#" class = "link">Functions</a>
+                        <div class="dropdown-menu">
+                            <a href = "#location" class = "link1">Location</a>
+                            <a href = "#RMO" class = "link1">RMO</a>
+                        </div>
+                    </div>
+                    </li>
+                    
+                    <li><a class = "nav_link" href = "#contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div id = "Acc">
+                {% comment %} <a id = "Login" href = "/login" type="Login">Log in</a> {% endcomment %}
+                <!-- <button class = "Sign" type="Sign up">Sign Up</button> -->
+                {% if user.is_authenticated %}
+                <div class="col-md-3 text-end">
+                  <a href="#" class="Login btn btn-outline-primary me-2">Hi, {{ user.username }}</a>
+                  <a href="/logout" class="Login btn btn-outline-primary me-2">Logout</a>
+                </div>
+                {% else %}
+                <div class="col-md-3 text-end">
+                  <a href="/login" class="Login btn btn-outline-primary me-2">Login</a>
+                </div>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    <section id = "Scan" class = "mbody , hidden">
+        <div class="left">
+            <h1>GET YOUR ITEMS SCANNED IN SECONDS.</h1>
+            <form method="POST" action="/predict" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input class = "filename" type="file" id="myFile" name="uploadedImage"/>
+                <button class = "Submit" type="submit">Upload Image</button>
+              </form>
+        </div>
+        <div class="right">
+            <model-viewer src="{% static "Images/trash.glb" %}" camera-controls auto-rotate disable-zoom></model-viewer>
+        </div>
+    </section>
+    <script type = "text/javascript" src ="{% static 'js/index.js' %}"></script>
+    <script type = "text/javascript" src ="{% static 'js/car.js' %}"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.1/model-viewer.min.js"></script>
+</body>
+</html>
