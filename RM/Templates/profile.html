@@ -23,22 +23,21 @@
           </button>
   
           <div class="collapse navbar-collapse d-lg-flex" id="navbarsExample11">
-            <a class="nav-brand navbar-brand col-lg-3 me-0" href="#">Centered nav</a>
+            <a class="nav-brand navbar-brand col-lg-3 me-0" href="#">{{ user.username }}'s Profile</a>
 
             <div class="d-lg-flex col-lg-9 justify-content-lg-end">
-              <a href="/" class="btn btn-primary">Button</a>
+              <a href="/" class="btn btn-outline-dark">Home</a>
             </div>
           </div>
         </div>
       </nav>
 
     <section class="container-fluid mainSection">
-    <h3>Hello , {{ user.username }}</h3>
-    <h4>Your Recycle List</h4>
+    <h1 class="profileHeader">Your Recycle List</h1>
     </section>
 
     <div class="album py-5 bg-body-tertiary">
-        <div class="container">
+        <div class="container-fluid">
     
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {% for x in itemData %}

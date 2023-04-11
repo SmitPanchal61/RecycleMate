@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Delicious+Handrawn&display=swap');
+
 .nav-brand {
     font-size: 30px !important;
     font-weight: bold;
@@ -9,5 +12,17 @@
 }
 
 .mainSection {
-    margin: 20px;
+    margin-top: 20px;
+}
+
+.profileHeader {
+    font-family:'Acme', sans-serif; 
+    font-family: 'Delicious Handrawn', cursive;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 25px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
 }
