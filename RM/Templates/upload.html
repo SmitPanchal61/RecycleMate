@@ -40,8 +40,15 @@
                 {% comment %} <a id = "Login" href = "/login" type="Login">Log in</a> {% endcomment %}
                 <!-- <button class = "Sign" type="Sign up">Sign Up</button> -->
                 {% if user.is_authenticated %}
-                <div class="col-md-3 text-end">
-                  <a href="#" class="Login btn btn-outline-primary me-2">Hi, {{ user.username }}</a>
+                {% comment %} <div class="col-md-3 text-end">
+                    <div class = "dropdown">
+                        <a href = "#" class = "link Login">Hi, {{ user.username }}</a>
+                        <div class="dropdown-menu">
+                            <a href="/profile" class = "link1 loginDropLink">Profile</a>
+                            <a href="/logout" class = "link1 loginDropLink">Logout</a>
+                        </div>
+                    </div> {% endcomment %}
+                  <a href="/profile" class="Login btn btn-outline-primary me-2">Hi, {{ user.username }}</a>
                   <a href="/logout" class="Login btn btn-outline-primary me-2">Logout</a>
                 </div>
                 {% else %}
@@ -60,10 +67,29 @@
                 <input class = "filename" type="file" id="myFile" name="uploadedImage"/>
                 <button class = "Submit" type="submit">Upload Image</button>
               </form>
+              <div class="jumbotron">
+                  <div class="container">
+                      <h1 class="display-3">{{ result }}</h1>
+                      {% if prediction and recycle %}
+                  <p>Add item to the list: </p>
+                  <form method="POST" action="/addItem" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="itemName">Name</label>
+                    <input type="text" id="itemName" name="itemName">
+                  <p><button class="Submit" type="submit">Add</button></p>
+                </form>
+                {% endif %}
+                </div>
+              </div>
+            
+
         </div>
         <div class="right">
             <model-viewer src="{% static "Images/trash.glb" %}" camera-controls auto-rotate disable-zoom></model-viewer>
+
+
         </div>
+
     </section>
     <script type = "text/javascript" src ="{% static 'js/index.js' %}"></script>
     <script type = "text/javascript" src ="{% static 'js/car.js' %}"></script>

@@ -40,10 +40,8 @@
                 {% comment %} <a id = "Login" href = "/login" type="Login">Log in</a> {% endcomment %}
                 <!-- <button class = "Sign" type="Sign up">Sign Up</button> -->
                 {% if user.is_authenticated %}
-                <div class="col-md-3 text-end">
-                  <a href="#" class="Login btn btn-outline-primary me-2">Hi, {{ user.username }}</a>
+                <a href="/profile" class="Login btn btn-outline-primary me-2">Hi, {{ user.username }}</a>
                   <a href="/logout" class="Login btn btn-outline-primary me-2">Logout</a>
-                </div>
                 {% else %}
                 <div class="col-md-3 text-end">
                   <a href="/login" class="Login btn btn-outline-primary me-2">Login</a>

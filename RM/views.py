@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
-from RM.models import contact
+from RM.models import contact, items
 from django.contrib import messages
 from django.http import HttpResponse
 import tensorflow as tf
@@ -90,8 +90,12 @@ def logout(request):
     auth.logout(request)
     return redirect(home)
 
+
 def imagePrediction(request):
+    global imageUrl
     if request.method == 'POST':
+        prediction = False
+        recycle = False
         uploadedImage = request.FILES['uploadedImage']
         fs = FileSystemStorage()
         filename = fs.save(uploadedImage.name, uploadedImage)
@@ -102,10 +106,19 @@ def imagePrediction(request):
         #img = cv2.imread('bottle.jpg')
         yhat = model.predict(np.expand_dims(resize/255, 0))
         # yhat
+        result = ''
         if yhat > 0.5: 
-            print(f'Predicted class is Recyclable')
+            result = 'RECYCLABLE'
+            prediction = True
+            recycle = True
+            imageUrl = 'media/'+filename
         else:
-            print(f'Predicted class is Non-Recyclable')
+            result = 'NON-RECYCLABLE'
+            prediction = True
+            recycle = False
+            
+        context = {'result': 'The Uploaded Image is ' + result , 'prediction': prediction, 'recycle': recycle}
+        return render(request, 'upload.html', context)
         
         # # model.save('R_NR_2.h5')
         # img = request.FILES['uploadedImage']
@@ -119,3 +132,31 @@ def imagePrediction(request):
         #     print(f'Predicted class is Non-Recyclable')
         
     return render(request, 'upload.html')
+
+def addItem(request):
+    if request.method == 'POST':
+        current_user = request.user
+        active_user_id = current_user.id
+        print(active_user_id)
+        print(imageUrl)
+        itemName = request.POST['itemName']
+        item = items(Name=itemName, img_Link=imageUrl, user_id=active_user_id)
+        item.save()
+        return redirect(imagePrediction)
+        
+        
+
+def profile(request):
+    current_user = request.user
+    active_user_id = current_user.id
+    itemData = items.objects.filter(user_id=active_user_id).values()
+    context = {'itemData': itemData}
+    return render(request, 'profile.html', context)
+
+def deleteItem(request, imgId):
+    if request.method == 'POST':
+        record = items.objects.get(id=imgId)
+        record.delete()
+        return redirect('/profile')
+        
+        

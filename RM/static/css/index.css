@@ -373,3 +373,15 @@ input[type=password], select{
     transform:rotate(45deg);
     cursor: pointer;
 } */
+
+.loginDropLink {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: block;
+    text-decoration: none;
+    margin: 15px;
+    color: black;
+}
+
+.loginDropLink:hover {
+    color: crimson;
+}

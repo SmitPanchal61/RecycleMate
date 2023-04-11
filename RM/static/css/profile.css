@@ -1,0 +1,13 @@
+.nav-brand {
+    font-size: 30px !important;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.navbar {
+    background-image: linear-gradient(to bottom right , #00a99d,#01cba1,#96fbae,#7af1ab,#61e7a8,#46dda6,#27d1a4,#2de7a3 ) !important;
+}
+
+.mainSection {
+    margin: 20px;
+}
