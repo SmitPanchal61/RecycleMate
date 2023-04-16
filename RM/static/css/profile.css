@@ -19,10 +19,104 @@
     font-family:'Acme', sans-serif; 
     font-family: 'Delicious Handrawn', cursive;
     font-weight: bold;
+    font-size: 30px;
 }
 
 .card-text {
     font-size: 25px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bold;
+}
+
+.indInfo {
+    color: black;
+    display: inline-block;
+    width: 50%;
+}
+
+.indInfoDiv {
+    display: inline-block;
+    width: 50%;
+}
+
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+    margin: 20px 0;
+  }
+
+.industryImage {
+    height: 300px;
+    width: 300px;
+    margin: 0 50px;
+}
+
+.card-text {
+    font-size: 20px;
+    font-style: italic;
+}
+
+span {
+    font-size: 24px;
+    color: crimson
+}
+
+.userImage {
+    height: 80px;
+    width: 80px;
+    margin: 0 50px;
+}
+
+.statsCard {
+    font-size: 16px;
+}
+
+.statsCardTitle {
+    font-size: 16px;
+}
+
+.userCard {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 480px;
+}
+
+.userSpan {
+    color: crimson;
+    font-size: 16px;
+}
+
+.userhis{
+    display: flex;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.left-userhis {
+    background-color: #61e7a8;
+    width: 50%;
+}
+
+.right-userhis {
+    background-color: white;
+    padding-left: 200px;
+}
+
+.right-userhis img {
+    height: 17rem;
+}
+
+.adminInp {
+    border-radius: 10px;
+    height: 30px;
+
+}
+
+.adminbtn {
+    margin-left: 223px;
+    margin-top: 20px;
+}
+
+.searchHead {
+    margin-top: 20px;
 }

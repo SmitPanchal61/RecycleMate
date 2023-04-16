@@ -11,4 +11,9 @@ urlpatterns = [
     path('profile',views.profile),
     path('addItem',views.addItem),
     path('delete/<int:imgId>',views.deleteItem),
+    path('resources', views.resources),
+    path('userstats', views.userStats),
+    path('findUser', views.findUser),
+    path('findSociety', views.findSociety),
+    path('<int:userId>', views.viewItems),
 ]

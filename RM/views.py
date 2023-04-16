@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
-from RM.models import contact, items
+from RM.models import contact, items, industry
 from django.contrib import messages
 from django.http import HttpResponse
 import tensorflow as tf
@@ -12,6 +12,7 @@ import PIL as pillow
 from PIL import Image
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
 
 #request -> respond
@@ -46,8 +47,8 @@ def login(request):
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
-        # first_name = request.POST['first_name']
-        # last_name = request.POST['last_name']
+        Society = request.POST['Society']
+        City = request.POST['City']
         email = request.POST['email']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
@@ -60,7 +61,7 @@ def register(request):
                 messages.info(request, 'Email is already taken')
                 return redirect(login)
             else:
-                user = User.objects.create_user(username=username,password=password, email=email)
+                user = User.objects.create_user(username=username,first_name=Society,last_name=City,password=password, email=email)
                 user.save()
                 
                 return redirect(login)
@@ -158,5 +159,38 @@ def deleteItem(request, imgId):
         record = items.objects.get(id=imgId)
         record.delete()
         return redirect('/profile')
+    
+def resources(request):
+    industryData = industry.objects.values()
+    # print(industryData)
+    context = {'industryData': industryData}
+    return render(request, 'resources.html', context)
+
+@staff_member_required(login_url='/login')
+def userStats(request):
+    return render(request, 'userStats.html')
+
+def findUser(request):
+    if request.method == 'POST':
+        userName = request.POST['username']
+        userData = User.objects.filter(username=userName).values()
+        userDataId = userData[0]['id']
+        itemData = items.objects.filter(user_id=userDataId).values()
+        print(userDataId)
+        context = {'userData': userData, 'itemData':itemData}
+        return render(request, 'userStats.html',context)
+    
+def findSociety(request):
+    if request.method == 'POST':
+        societyName = request.POST['societyName']
+        userData = User.objects.filter(first_name=societyName).values()
+        context = {'userData':userData}
+        return render(request,'userStats.html',context)
+
+@staff_member_required(login_url='/login')   
+def viewItems(request,userId):
+    itemData = items.objects.filter(user_id=userId).values()
+    context = {'itemData':itemData, 'deleteString': 5}
+    return render(request, 'viewItem.html', context)
         
         

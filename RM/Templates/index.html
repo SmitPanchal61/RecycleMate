@@ -23,9 +23,12 @@
                     <li><a class = "nav_link" href = "#home">Home</a></li>
                     <li><a class = "nav_link" href = "#intro">About Us</a></li>
                     <li><a class = "nav_link" href = "/predict">Scan</a></li>
-                    <li><a class = "nav_link" href = "/predict">Resources</a></li>
+                    <li><a class = "nav_link" href = "/resources">Resources</a></li>
                     
                     <li><a class = "nav_link" href = "#contact">Contact Us</a></li>
+                    {% if user.is_superuser %}
+                    <li><a class = "nav_link" href = "/userstats">Users</a></li>
+                    {% endif %}
                 </ul>
             </div>
             <div id = "Acc">

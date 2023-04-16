@@ -209,3 +209,10 @@ input[type=emai], select {
     color: white;
     background-color: black;
 }
+
+.recycleAdd {
+    margin-left: 160px;
+    font-size: 25px;
+    padding: 30px;
+    font-family: 'Delicious Handrawn', cursive;
+}

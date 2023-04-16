@@ -23,9 +23,12 @@
                     <li><a class = "nav_link" href = "/">Home</a></li>
                     <li><a class = "nav_link" href = "/">About Us</a></li>
                     <li><a class = "nav_link" href = "/predict">Scan</a></li>
-                    <li><a class = "nav_link" href = "/predict">Resources</a></li>
+                    <li><a class = "nav_link" href = "/resources">Resources</a></li>
                     
                     <li><a class = "nav_link" href = "/">Contact Us</a></li>
+                    {% if user.is_superuser %}
+                    <li><a class = "nav_link" href = "/userstats">Users</a></li>
+                    {% endif %}
                 </ul>
             </div>
             <div id = "Acc">
@@ -63,13 +66,18 @@
                   <div class="container">
                       <h1 class="display-3">{{ result }}</h1>
                       {% if prediction and recycle %}
+                    <div class="recycleAdd">
                   <p>Add item to the list: </p>
                   <form method="POST" action="/addItem" enctype="multipart/form-data">
                     {% csrf_token %}
                     <label for="itemName">Name</label>
                     <input type="text" id="itemName" name="itemName">
+                  </div>
                   <p><button class="Submit" type="submit">Add</button></p>
+                  <div class="recycleAdd">
+                  <a href="/resources">Industries that manage your waste</a>
                 </form>
+            </div>
                 {% endif %}
                 </div>
               </div>
