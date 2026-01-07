@@ -6,7 +6,21 @@ from django.http import HttpResponse
 import tensorflow as tf
 import numpy as np
 import keras
-from tensorflow.keras.utils import load_img, img_to_array
+try:
+    from tensorflow.keras.utils import load_img, img_to_array
+except ImportError:
+    try:
+        from keras.utils import load_img, img_to_array
+    except ImportError:
+        # Fallback: use PIL directly
+        from PIL import Image
+        def load_img(path, target_size=None):
+            img = Image.open(path)
+            if target_size:
+                img = img.resize(target_size)
+            return img
+        def img_to_array(img):
+            return np.array(img)
 from tensorflow.keras.models import load_model
 import PIL as pillow
 from PIL import Image
@@ -23,7 +37,27 @@ from django.contrib.admin.views.decorators import staff_member_required
 #     # return HttpResponse('hello world')
 #     return render(request, 'hello.html', {'name': 'Amit'})
 
-model = tf.keras.models.load_model("R_NR_2.h5")
+# Load model lazily to avoid compatibility issues at import time
+_model = None
+imageUrl = None  # Global variable to store the last predicted image URL
+
+def get_model():
+    global _model
+    if _model is None:
+        # Load model with compile=False to avoid reduction='auto' compatibility issue
+        # Then recompile with compatible settings
+        try:
+            _model = tf.keras.models.load_model("R_NR_2.h5", compile=False)
+            # Recompile with compatible settings if needed
+            if not _model._is_compiled:
+                _model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        except Exception as e:
+            # If compile=False doesn't work, try with custom_objects
+            from tensorflow.keras.losses import BinaryCrossentropy
+            custom_objects = {'BinaryCrossentropy': BinaryCrossentropy}
+            _model = tf.keras.models.load_model("R_NR_2.h5", custom_objects=custom_objects, compile=False)
+            _model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    return _model
 
 def home(request):
     return render(request,'index.html')
@@ -86,12 +120,6 @@ def feedback(request):
 
     return render(request,'index.html')
 
-
-def logout(request):
-    auth.logout(request)
-    return redirect(home)
-
-
 def imagePrediction(request):
     global imageUrl
     if request.method == 'POST':
@@ -102,9 +130,13 @@ def imagePrediction(request):
         filename = fs.save(uploadedImage.name, uploadedImage)
         uploaded_file_url = fs.url(filename)
 
+        # Load and preprocess image
         img = load_img('media/'+filename, target_size=(256, 256))
-        resize = tf.image.resize(img, (256,256))
+        # Convert PIL image to numpy array, then to tensor
+        img_array = img_to_array(img)
+        resize = tf.image.resize(img_array, (256, 256))
         #img = cv2.imread('bottle.jpg')
+        model = get_model()
         yhat = model.predict(np.expand_dims(resize/255, 0))
         # yhat
         result = ''
@@ -136,13 +168,24 @@ def imagePrediction(request):
 
 def addItem(request):
     if request.method == 'POST':
+        # Check if user is authenticated
+        if not request.user.is_authenticated:
+            messages.error(request, 'Please login to save items to your profile.')
+            return redirect(login)
+        
         current_user = request.user
         active_user_id = current_user.id
-        print(active_user_id)
-        print(imageUrl)
-        itemName = request.POST['itemName']
+        
+        # Check if imageUrl is set (from previous prediction)
+        global imageUrl
+        if imageUrl is None:
+            messages.error(request, 'No image found. Please upload and predict an image first.')
+            return redirect(imagePrediction)
+        
+        itemName = request.POST.get('itemName', 'Unnamed Item')
         item = items(Name=itemName, img_Link=imageUrl, user_id=active_user_id)
         item.save()
+        messages.success(request, 'Item saved to your profile successfully!')
         return redirect(imagePrediction)
         
         
