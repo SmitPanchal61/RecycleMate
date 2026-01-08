@@ -2,108 +2,130 @@
 <html lang="en">
 {% load static %}
 <head>
-    {% comment %} {% load static %} {% endcomment %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recycle Mate</title>
-    {% comment %} {% load static %} {% endcomment %}
-    <link rel = "icon" type="image" href="{%static "Images/favicon.ico" %}"> 
-    {% comment %} {% load static %} {% endcomment %}
-    <link rel="stylesheet" href = "{% static 'css/index.css' %}">
-    <link rel="stylesheet" href = "{% static 'css/Lower.css' %}">
-    <!-- <link rel="stylesheet" href = "{{STATIC_URL}} css/index.css"> -->
+    <link rel="icon" type="image" href="{%static "Images/favicon.ico" %}"> 
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <nav id = "navbar">
-            <div class = "logo"><a href = "#home">Recycle  Mate</a></div>
-            <div id ="Main-list">
+        <nav id="navbar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <a href="#home">Recycle Mate</a>
+            </div>
+            <div id="Main-list">
                 <ul>
-                    <li><a class = "nav_link" href = "#home">Home</a></li>
-                    <li><a class = "nav_link" href = "#intro">About Us</a></li>
-                    <li><a class = "nav_link" href = "/predict">Scan</a></li>
-                    <li><a class = "nav_link" href = "/resources">Resources</a></li>
-                    
-                    <li><a class = "nav_link" href = "#contact">Contact Us</a></li>
+                    <li><a class="nav_link" href="#home">Home</a></li>
+                    <li><a class="nav_link" href="#intro">About Us</a></li>
+                    <li><a class="nav_link" href="/predict">Scan</a></li>
+                    <li><a class="nav_link" href="/resources">Resources</a></li>
+                    <li><a class="nav_link" href="#contact">Contact Us</a></li>
                     {% if user.is_superuser %}
-                    <li><a class = "nav_link" href = "/userstats">Users</a></li>
+                    <li><a class="nav_link" href="/userstats">Users</a></li>
                     {% endif %}
                 </ul>
             </div>
-            <div id = "Acc">
-                {% comment %} <a id = "Login" href = "/login" type="Login">Log in</a> {% endcomment %}
-                <!-- <button class = "Sign" type="Sign up">Sign Up</button> -->
+            <div id="Acc">
                 {% if user.is_authenticated %}
-                <a href="/profile" class="Login btn btn-outline-primary me-2">Hi, {{ user.username }}</a>
-                  <a href="/logout" class="Login btn btn-outline-primary me-2">Logout</a>
+                <a href="/profile" class="nav-text-link">Hi, {{ user.username }}</a>
+                <a href="/logout" class="btn-primary">Logout</a>
                 {% else %}
-                <div class="col-md-3 text-end">
-                  <a href="/login" class="Login btn btn-outline-primary me-2">Login</a>
-                </div>
+                <a href="/login" class="nav-text-link">Sign up</a>
+                <a href="/login" class="btn-primary">Login</a>
                 {% endif %}
             </div>
         </nav>
     </header>
-    {% comment %} <div class="bg-modal">
-        <div class="modal-content">
-            <div class="close">+</div>
-            <h1>Recycle Mate</h1>
-            <h2>Sign in</h2>
-             <!-- <h3>Don't have an account?<a href = "/Signup" id = "Signup">SignUp</a></h3>  -->
-            <h3>Don't have an account?<a href = "#" id = "Signup">SignUp</a></h3>
-            <!-- <label for = "email">Enter your Email: </label> -->
-            <form action = ""> 
-            <input class = "email" type = "email" id = "email" name="email" placeholder="Email">
-            <input class = "email" type="password" id = "password" name="password" placeholder="Password">
-            <button class = "Submit" type="Submit">Submit</button>
-            </form>
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-label">RECYCLE MATE</div>
+                <h1 class="hero-headline">Better recycling is just a few keystrokes away.</h1>
+                <div class="hero-cta">
+                    <a href="/predict" class="btn-primary btn-large">Start Scanning</a>
+                    <a href="#intro" class="btn-secondary btn-large">Learn more</a>
+                </div>
+                <div class="hero-link">
+                    <a href="/login">Or sign up</a>
+                </div>
+            </div>
+            <div class="hero-illustration">
+                <div class="abstract-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                    <div class="shape shape-4"></div>
+                    <div class="shape shape-5"></div>
+                    <div class="shape shape-6"></div>
+                </div>
+            </div>
         </div>
-    </div>  {% endcomment %}
+    </section>
 
-    {% comment %} <div class="bg-modal1">
-        <div class="modal-content1">
-            <!-- <div class="close">+</div> -->
-            <h1>Recycle Mate</h1>
-            <h2>Sign Up</h2>
-            <!-- <h3>Don't have an account?<a href = "#login" class = "login1" id ="Login">Log in</a></h3> -->
-            <h3>Don't have an account?</h3><button id = "Login" href = "#" type="Login">Log in</button>
-            <!-- <label for = "email">Enter your Email: </label> -->
-            <form action = "">
-            <input class ="email" type="name" placeholder="Name">
-            <input class = "email" type = "email"  name="email" placeholder="Email">
-            <input class = "email" type="password" name="password" placeholder="Password">
-            <button class = "Submit" type="Submit">Submit</button>
-            </form>
+    <!-- Feature Section -->
+    <section class="feature-section">
+        <div class="feature-container">
+            <div class="feature-content">
+                <h2 class="section-heading">Scan, identify and recycle with ease</h2>
+                <p class="section-description">RecycleMate makes it easy to identify recyclable items, track your recycling history, and contribute to a better environment in minutes.</p>
+            </div>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="card-illustration">
+                        <div class="card-shape card-shape-1"></div>
+                        <div class="card-shape card-shape-2"></div>
+                        <div class="card-shape card-shape-3"></div>
+                    </div>
+                    <h3 class="card-heading">Keep tabs on your recycling</h3>
+                    <p class="card-description">Track all your recycled items and maintain a complete history of your environmental contributions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-illustration">
+                        <div class="card-shape card-shape-4"></div>
+                        <div class="card-shape card-shape-5"></div>
+                        <div class="card-shape card-shape-6"></div>
+                    </div>
+                    <h3 class="card-heading">Instant item identification</h3>
+                    <p class="card-description">Use our AI-powered scanner to instantly identify recyclable items and get recycling recommendations.</p>
+                </div>
+            </div>
         </div>
-    </div>  {% endcomment %}
-    <!-- <div class="log">
-        <img src = "{%static "Images/bg1.jpg" %}" alt="logo" class="log"/>
-    </div> -->
-    <section aria-label="Newest Photo" id="home">
-        <div class="carousel"data-carousel>
-            <button class="carousel-button prev" data-carousel-button="prev">&#8678;</button>
-            <button class="carousel-button next" data-carousel-button="next">&#8680;</button>
-            <ul data-slides>
-                <li class = "slide" data-active>
-                    <img src = "{%static "Images/bg1.jpg" %}" alt="bg1">
-                </li>
-                <li class = "slide">
-                    <img src = "{%static "Images/forest.jpg" %}" alt="bg2">
-                </li>
-                <li class = "slide">
-                    <img src = "{%static "Images/glass.jpg" %}" alt="bg3">
-                </li>
-                <li class = "slide">
-                    <img src = "{%static "Images/12.png" %}" alt="bg4">
-                </li>
-                <li class = "slide">
-                    <img src = "{%static "Images/handb.jpg" %}" alt="bg5">
-                </li>
-                <li class = "slide">
-                    <img src = "{%static "Images/scene (2).jpg" %}" alt="bg6">
-                </li>
-            </ul>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="benefits-container">
+            <div class="benefit-item">
+                <div class="benefit-illustration">
+                    <div class="benefit-shape benefit-shape-1"></div>
+                    <div class="benefit-shape benefit-shape-2"></div>
+                </div>
+                <h3 class="benefit-heading">Keep tabs on your credit</h3>
+                <p class="benefit-description">Monitor your environmental impact and see how your recycling efforts contribute to a sustainable future.</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-illustration">
+                    <div class="benefit-shape benefit-shape-3"></div>
+                    <div class="benefit-shape benefit-shape-4"></div>
+                </div>
+                <h3 class="benefit-heading">Don't have an account?</h3>
+                <p class="benefit-description">Sign up today and start your recycling journey. It's free, easy, and makes a real difference.</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-illustration">
+                    <div class="benefit-shape benefit-shape-5"></div>
+                    <div class="benefit-shape benefit-shape-6"></div>
+                </div>
+                <h3 class="benefit-heading">Receive and request items</h3>
+                <p class="benefit-description">Connect with local recycling centers and discover new ways to recycle your items effectively.</p>
+            </div>
         </div>
     </section>
     <!-- <section id = "home2">
@@ -122,59 +144,24 @@
             <div>step3</div>
         </div>
     </section> -->
-    <section id = "intro" class = "hidden">
-        <div class = intro1>
-            <h1>What we do</h1>
-        </div>
-        <div class="mbody">
-            <div class="msg1">
-                <div class="empty1"></div>
-                <div class="thing1 center1">
-                    <h3>We take care of your recyclable items</h3>
-                    <p>Forget about the tedious task which makes you to think about the waste or items which can be reusable as they are 
-                        somewhere lying around in the workplace or in the house.
-                    </p>
-                    <h4 class = "q1">"Recycle It all , No Matter How small!"</h4>
+    <!-- About Section -->
+    <section id="intro" class="about-section">
+        <div class="about-container">
+            <div class="about-content">
+                <div class="about-illustration-large">
+                    <div class="large-shape large-shape-1"></div>
+                    <div class="large-shape large-shape-2"></div>
+                    <div class="large-shape large-shape-3"></div>
                 </div>
-                <div class="thing2 uni">
-                    <img src = "{%static "Images/bin.jpg" %}" alt="bin">
+                <div class="about-text">
+                    <h2 class="section-heading">Choose the solution that works for you</h2>
+                    <p class="section-description">RecycleMate is here to make it easy to identify, track, and recycle items with friends and family in minutes. Join thousands of users making a positive environmental impact every day.</p>
+                    <p class="section-description">Our AI-powered platform helps you make informed decisions about recycling, reducing waste, and contributing to a sustainable future. Start your journey today.</p>
+                    <div class="about-cta">
+                        <a href="/predict" class="btn-primary btn-large">Learn more about scanning</a>
+                        <a href="/login" class="about-link">Or sign up</a>
+                    </div>
                 </div>
-                <div class="empty2"></div>
-            </div>
-            <div class="msg1">
-                <div class="empty1"></div>
-                <div class="thing1 uni uni3">
-                    <img src = "{%static "Images/bottle.jpeg" %}" alt="bottle">
-                </div>
-                <div class="thing2 rside center1">
-                    <h3>We help you maintain your history</h3>
-                    <p>This will turn out to be the one of the best things and useful to all of us 
-                        .Regarding which items you have already looked.
-                    </p>
-                    <h4 class = "q1">"When you put the whole picture together. Recycling is the right thing to do."</h4>
-                        <h2>- Pam Shoemaker</h2>
-                </div>
-                <div class="empty2"></div>
-            </div>
-            <div class="msg1">
-                <div class="empty1"></div>
-                <div class="thing1">
-                    <h3>Keeping Space Tidy</h3>
-                    <p>
-                    </p>
-                    <h4 class = "q1">"If you care about the environment and how it will affect mankind, then recycling shouldn't 
-                        take a second thought"</h4>
-                        <h2>- Jeffery Sanderson</h2>
-                    <h3>Contributing to make our world a better place</h3>
-                    <p>
-                    </p>
-                    <h4 class = "q1">"If you're not buying recycled products, you're not really rcycling"</h4>
-                        <h2>- Ed Begley, Jr.</h2>
-                </div>
-                <div class="thing2 uni uni1">
-                    <img src = "{%static "Images/greenbin.jpg" %}" alt="recycle">
-                </div>
-                <div class="empty2"></div>
             </div>
         </div>
     </section>
@@ -192,25 +179,26 @@
         </div>
     </section> {% endcomment %}
 
-    <section id = "contact" class = "hidden" >
-        <div class="cont">
-            <h1>Looking to talk!</h1> 
-        <div class="mainlast">
-            <form method="POST" action="/feedback">
-                {% csrf_token %}
-                <input class = "emai" type = "emai" name="name" placeholder="Name">
-                <input class = "emai" type = "emai" name="email" placeholder="Email">
-                <textarea class="text" name="message" placeholder="Write something" style="width: 500px; height: 166px;"></textarea>
-                <button class = "Send" type="submit">Send</button>
-            </form>
-            <div class="img2">
-                <img src = "{%static "Images/5751.jpg" %}" alt="contact">
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <h2 class="section-heading">Looking to talk!</h2>
+            <div class="contact-content">
+                <form method="POST" action="/feedback" class="contact-form">
+                    {% csrf_token %}
+                    <input class="form-input" type="text" name="name" placeholder="Name" required>
+                    <input class="form-input" type="email" name="email" placeholder="Email" required>
+                    <textarea class="form-textarea" name="message" placeholder="Write something" required></textarea>
+                    <button class="btn-primary btn-large" type="submit">Send</button>
+                </form>
             </div>
         </div>
-        </div>
     </section>
-    <footer class="foot">
-        All rights reserved! 2023
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>All rights reserved! 2024</p>
+        </div>
     </footer>
     {% load static %}
     <script type = "text/javascript" src ="{% static 'js/index.js' %}"></script>

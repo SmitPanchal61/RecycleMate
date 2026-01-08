@@ -5,85 +5,105 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycle Mate - Register</title>
+    <link rel="icon" type="image" href="{%static "Images/favicon.ico" %}"> 
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <section class="vh-100">
-        <div class="container-fluid h-custom">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-md-9 col-lg-6 col-xl-5">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                class="img-fluid" alt="Sample image">
+    <header>
+        <nav id="navbar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <a href="/">Recycle Mate</a>
             </div>
-            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              <form action="/register" method="POST">
-                {% csrf_token %}
-                <!-- First Name input -->
-                <div class="form-outline mb-4">
-                  <input name="username" type="text" id="form3Example3" class="form-control form-control-lg"
-                    placeholder="Username" />
-                </div>
-
-                <!-- First Name input -->
-                <!-- <div class="form-outline mb-4">
-                  <input name="first_name" type="text" id="form3Example3" class="form-control form-control-lg"
-                    placeholder="First Name" />
-                </div> -->
-
-                <!-- Last Name input -->
-                <!-- <div class="form-outline mb-4">
-                  <input name="last_name" type="text" id="form3Example3" class="form-control form-control-lg"
-                    placeholder="Last Name" />
-                </div> -->
-
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <input name="email" type="email" id="form3Example3" class="form-control form-control-lg"
-                    placeholder="Email Address" />
-                </div>
-
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <input name="Society" type="text" id="form3Example3" class="form-control form-control-lg"
-                    placeholder="Society Name" />
-                </div>
-
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <input name="City" type="text" id="form3Example3" class="form-control form-control-lg"
-                    placeholder="City" />
-                </div>
-      
-                <!-- Password input -->
-                <div class="form-outline mb-3">
-                  <input name="password" type="password" id="form3Example4" class="form-control form-control-lg"
-                    placeholder="Password" />
-                </div>
-
-                <!-- Confirm Password input -->
-                <div class="form-outline mb-3">
-                  <input name="confirm_password" type="password" id="form3Example4" class="form-control form-control-lg"
-                    placeholder="Confirm Password" />
-                </div>
-
-      
-                <div class="text-center text-lg-start mt-4 pt-2">
-                  <button type="submit" class="btn btn-success"
-                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Sign Up</button>
-                  <a href="/" class="btn btn-outline-danger"
-                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Home</a>
-                  <p class="loginPara small fw-bold mt-2 pt-1 mb-0">have an account? <a href="/login"
-                      class="link-danger">Login</a></p>
-                </div>
-      
-              </form>
+            <div id="Main-list">
+                <ul>
+                    <li><a class="nav_link" href="/">Home</a></li>
+                    <li><a class="nav_link" href="/#intro">About Us</a></li>
+                    <li><a class="nav_link" href="/predict">Scan</a></li>
+                    <li><a class="nav_link" href="/resources">Resources</a></li>
+                    <li><a class="nav_link" href="/#contact">Contact Us</a></li>
+                </ul>
             </div>
-          </div>
+            <div id="Acc">
+                <a href="/register" class="nav-text-link">Sign up</a>
+                <a href="/login" class="btn-primary">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="login-section">
+        <div class="login-container">
+            <div class="login-content">
+                <div class="login-image-wrapper">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                        class="login-image" alt="Register illustration">
+                </div>
+                <div class="login-form-wrapper">
+                    <div class="login-form-card">
+                        <h1 class="login-title">Create Account</h1>
+                        <p class="login-subtitle">Join us and start making a positive environmental impact</p>
+                        
+                        <form action="/register" method="POST" class="login-form">
+                            {% csrf_token %}
+                            
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <input name="username" type="text" id="username" class="form-input"
+                                    placeholder="Choose a username" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input name="email" type="email" id="email" class="form-input"
+                                    placeholder="Enter your email" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="society" class="form-label">Society Name</label>
+                                <input name="Society" type="text" id="society" class="form-input"
+                                    placeholder="Enter your society name" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="city" class="form-label">City</label>
+                                <input name="City" type="text" id="city" class="form-input"
+                                    placeholder="Enter your city" required />
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <input name="password" type="password" id="password" class="form-input"
+                                    placeholder="Create a password" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <input name="confirm_password" type="password" id="confirm_password" class="form-input"
+                                    placeholder="Confirm your password" required />
+                            </div>
+
+                            <button type="submit" class="btn-primary btn-large login-btn">Sign Up</button>
+                            
+                            <div class="login-footer">
+                                <p class="login-link-text">Already have an account? <a href="/login" class="link-primary">Login</a></p>
+                                <a href="/" class="back-home-link">← Back to Home</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-      </section>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>All rights reserved! 2024</p>
+        </div>
+    </footer>
 </body>
 </html>
