@@ -29,5 +29,5 @@ RUN python manage.py collectstatic --noinput || true
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn RecycleMate.wsgi:application --bind 0.0.0.0:$PORT --workers 3"]
+CMD ["/bin/sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn RecycleMate.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 2"]
 
