@@ -57,16 +57,16 @@ WSGI_APPLICATION = "RecycleMate.wsgi.application"
 # --------------------------------------------------
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # project-level templates folder (optional but clean)
-        "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,  # enables RM/templates/
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # point explicitly to RM/templates folder in the image
+        'DIRS': [os.path.join(BASE_DIR, 'RM', 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
