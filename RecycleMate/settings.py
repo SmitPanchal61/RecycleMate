@@ -58,8 +58,11 @@ WSGI_APPLICATION = "RecycleMate.wsgi.application"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # point explicitly to RM/templates folder in the image
-        'DIRS': [os.path.join(BASE_DIR, 'RM', 'templates')],
+        # Try both common locations so deployed code finds templates
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'RM', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,6 +74,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 # --------------------------------------------------
 # Database (SQLite for demo)
