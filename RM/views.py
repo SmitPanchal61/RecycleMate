@@ -3,61 +3,76 @@ from django.contrib.auth.models import User, auth
 from RM.models import contact, items, industry
 from django.contrib import messages
 from django.http import HttpResponse
-import tensorflow as tf
+import os
 import numpy as np
-import keras
-try:
-    from tensorflow.keras.utils import load_img, img_to_array
-except ImportError:
-    try:
-        from keras.utils import load_img, img_to_array
-    except ImportError:
-        # Fallback: use PIL directly
-        from PIL import Image
-        def load_img(path, target_size=None):
-            img = Image.open(path)
-            if target_size:
-                img = img.resize(target_size)
-            return img
-        def img_to_array(img):
-            return np.array(img)
-from tensorflow.keras.models import load_model
-import PIL as pillow
+# avoid top-level tensorflow imports
+# import keras  # optional, only if you need it; remove if it triggers TF import
+
+# Prefer PIL-based image loading at module import (lightweight)
 from PIL import Image
+def load_img(path, target_size=None):
+    img = Image.open(path).convert("RGB")
+    if target_size:
+        img = img.resize(target_size)
+    return img
+
+def img_to_array(img):
+    return np.array(img)
+
+import PIL as pillow
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.contrib.admin.views.decorators import staff_member_required
+
+import importlib
+import threading
+
 # Create your views here.
 
-#request -> respond
-#request handler 
-# user sees
-
-# def say_hello(request): #func
-#     # return HttpResponse('hello world')
-#     return render(request, 'hello.html', {'name': 'Amit'})
-
-# Load model lazily to avoid compatibility issues at import time
+# Lazy model and lock
 _model = None
-imageUrl = None  # Global variable to store the last predicted image URL
+_model_lock = threading.Lock()
 
 def get_model():
+    """
+    Lazy-load tensorflow and the keras model on first use.
+    This avoids importing tensorflow during module import/startup.
+    """
     global _model
     if _model is None:
-        # Load model with compile=False to avoid reduction='auto' compatibility issue
-        # Then recompile with compatible settings
-        try:
-            _model = tf.keras.models.load_model("R_NR_2.h5", compile=False)
-            # Recompile with compatible settings if needed
-            if not _model._is_compiled:
-                _model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-        except Exception as e:
-            # If compile=False doesn't work, try with custom_objects
-            from tensorflow.keras.losses import BinaryCrossentropy
-            custom_objects = {'BinaryCrossentropy': BinaryCrossentropy}
-            _model = tf.keras.models.load_model("R_NR_2.h5", custom_objects=custom_objects, compile=False)
-            _model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        with _model_lock:
+            if _model is None:
+                # Import tensorflow only when we actually need it
+                tf = importlib.import_module("tensorflow")
+                model_path = os.path.join(settings.BASE_DIR, "R_NR_2.h5")
+
+                try:
+                    _model = tf.keras.models.load_model(model_path, compile=False)
+                    if not getattr(_model, "_is_compiled", True):
+                        _model.compile(
+                            optimizer="adam",
+                            loss="binary_crossentropy",
+                            metrics=["accuracy"],
+                        )
+                except Exception:
+                    # Fallback using custom_objects WITHOUT re-importing tensorflow
+                    custom_objects = {
+                        "BinaryCrossentropy": tf.keras.losses.BinaryCrossentropy
+                    }
+                    _model = tf.keras.models.load_model(
+                        model_path,
+                        custom_objects=custom_objects,
+                        compile=False,
+                    )
+                    _model.compile(
+                        optimizer="adam",
+                        loss="binary_crossentropy",
+                        metrics=["accuracy"],
+                    )
+
     return _model
+
+
 
 def home(request):
     return render(request,'index.html')
@@ -130,41 +145,57 @@ def imagePrediction(request):
         filename = fs.save(uploadedImage.name, uploadedImage)
         uploaded_file_url = fs.url(filename)
 
-        # Load and preprocess image
-        img = load_img('media/'+filename, target_size=(256, 256))
-        # Convert PIL image to numpy array, then to tensor
-        img_array = img_to_array(img)
-        resize = tf.image.resize(img_array, (256, 256))
-        #img = cv2.imread('bottle.jpg')
-        model = get_model()
-        yhat = model.predict(np.expand_dims(resize/255, 0))
-        # yhat
+        # Load image (PIL) and convert to numpy array
+        pil_img = load_img(os.path.join(settings.BASE_DIR, 'media', filename), target_size=(256, 256))
+        img_array = img_to_array(pil_img).astype('float32')  # shape (H, W, C)
+
+        # Lazy-import tensorflow only when we actually need it
+        try:
+            tf = importlib.import_module("tensorflow")
+        except Exception as e:
+            # TF failed to import — inform user and log
+            messages.error(request, "Server error: failed to import TensorFlow.")
+            return render(request, 'upload.html')
+
+        # resize (tf accepts numpy arrays but will convert to tensor)
+        try:
+            resized = tf.image.resize(img_array, (256, 256))
+        except Exception:
+            # Fallback: if tf.image.resize has issues, use numpy/PIL resize
+            resized = img_array  # already resized by load_img target_size
+
+        # Get model (this will lazy-load the model if not yet loaded)
+        try:
+            model = get_model()
+        except Exception as e:
+            messages.error(request, "Server error: failed to load model.")
+            return render(request, 'upload.html')
+
+        # Predict (normalize to [0,1])
+        try:
+            batch = np.expand_dims(resized / 255.0, axis=0)
+            yhat = model.predict(batch)
+        except Exception as e:
+            messages.error(request, "Server error during prediction.")
+            return render(request, 'upload.html')
+
+        # Interpret result
         result = ''
-        if yhat > 0.5: 
+        if np.asarray(yhat).size and (np.asarray(yhat) > 0.5).any():
             result = 'RECYCLABLE'
             prediction = True
             recycle = True
-            imageUrl = 'media/'+filename
+            imageUrl = os.path.join('media', filename)
         else:
             result = 'NON-RECYCLABLE'
             prediction = True
             recycle = False
-            
-        context = {'result': 'The Uploaded Image is ' + result , 'prediction': prediction, 'recycle': recycle}
-        return render(request, 'upload.html', context)
-        
-        # # model.save('R_NR_2.h5')
-        # img = request.FILES['uploadedImage']
-        # new_model = load_model('R_NR_2.h5')
-        # resize = tf.image.resize(img, (256,256))
-        # yhat_new = new_model.predict(np.expand_dims(resize/255, 0))
 
-        # if yhat_new > 0.5: 
-        #     print(f'Predicted class is Recyclable')
-        # else:
-        #     print(f'Predicted class is Non-Recyclable')
-        
+        context = {'result': 'The Uploaded Image is ' + result, 'prediction': prediction, 'recycle': recycle, 'imageUrl': imageUrl}
+        return render(request, 'upload.html', context)
+
     return render(request, 'upload.html')
+
 
 def addItem(request):
     if request.method == 'POST':
