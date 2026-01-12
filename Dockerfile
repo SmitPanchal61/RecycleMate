@@ -29,5 +29,10 @@ RUN python manage.py collectstatic --noinput || true
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn RecycleMate.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 2"]
+# CMD ["/bin/sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn RecycleMate.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 2"]
+
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+ENV PORT=10000
+ENTRYPOINT ["/app/entrypoint.sh"]
 
