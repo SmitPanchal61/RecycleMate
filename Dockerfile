@@ -29,5 +29,6 @@ RUN python manage.py collectstatic --noinput || true
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn RecycleMate.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 2"]
+CMD ["/bin/sh","-c","python manage.py migrate --noinput && python - <<'PY'\nfrom django import setup,conf\nimport os\nos.environ.setdefault('DJANGO_SETTINGS_MODULE','RecycleMate.settings')\nsetup()\nfrom RM.models import industry\nif industry.objects.count()==0:\n    import subprocess\n    subprocess.run(['python','manage.py','loaddata','RM/fixtures/industry.json'])\nPY\n&& python manage.py collectstatic --noinput && gunicorn RecycleMate.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 2"]
+
 
