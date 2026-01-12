@@ -1,0 +1,91 @@
+[
+    {
+      "model": "RM.industry",
+      "pk": 1,
+      "fields": {
+        "IndustryName": "Waste Management Inc.",
+        "Category": "Plastic, Paper, Metal",
+        "Type": "Material Recovery Facility",
+        "Location": "Houston, Texas, USA",
+        "Phone": 8009634776
+      }
+    },
+    {
+      "model": "RM.industry",
+      "pk": 2,
+      "fields": {
+        "IndustryName": "Republic Services",
+        "Category": "Plastic, Glass, Paper",
+        "Type": "Recycling & Waste Services",
+        "Location": "Phoenix, Arizona, USA",
+        "Phone": 6022372078
+      }
+    },
+    {
+      "model": "RM.industry",
+      "pk": 3,
+      "fields": {
+        "IndustryName": "Sims Metal Management",
+        "Category": "Metal Recycling",
+        "Type": "Metal Recycling Facility",
+        "Location": "Newark, New Jersey, USA",
+        "Phone": 9735893000
+      }
+    },
+    {
+      "model": "RM.industry",
+      "pk": 4,
+      "fields": {
+        "IndustryName": "TerraCycle",
+        "Category": "Hard-to-Recycle Plastics",
+        "Type": "Specialty Recycling",
+        "Location": "Trenton, New Jersey, USA",
+        "Phone": 6093934252
+      }
+    },
+    {
+      "model": "RM.industry",
+      "pk": 5,
+      "fields": {
+        "IndustryName": "Recology",
+        "Category": "Organic Waste, Recycling",
+        "Type": "Composting & Recycling",
+        "Location": "San Francisco, California, USA",
+        "Phone": 4153301400
+      }
+    },
+    {
+      "model": "RM.industry",
+      "pk": 6,
+      "fields": {
+        "IndustryName": "Rubicon",
+        "Category": "Recycling Analytics",
+        "Type": "Technology-Driven Recycling",
+        "Location": "Atlanta, Georgia, USA",
+        "Phone": 8444791500
+      }
+    },
+    {
+      "model": "RM.industry",
+      "pk": 7,
+      "fields": {
+        "IndustryName": "Closed Loop Partners",
+        "Category": "Circular Economy",
+        "Type": "Recycling Investment & Innovation",
+        "Location": "New York City, New York, USA",
+        "Phone": 2128047830
+      }
+    },
+    {
+      "model": "RM.industry",
+      "pk": 8,
+      "fields": {
+        "IndustryName": "Advanced Disposal (WM Subsidiary)",
+        "Category": "Municipal Recycling",
+        "Type": "Recycling Operations",
+        "Location": "Jacksonville, Florida, USA",
+        "Phone": 9043846300
+      }
+    }
+  ]
+  
